@@ -34,6 +34,7 @@ export async function handleAutoCommit({ style, options = {} }: AutoCommitParams
   try {
     execSync(`git commit -am "${commitMessage}"`);
     console.log(chalk.green("✅ Changes committed successfully!"));
+    console.log(chalk.bgGreen(commitMessage));
   } catch (error) {
     console.error(chalk.red("❌ Commit failed:"), error);
   }
