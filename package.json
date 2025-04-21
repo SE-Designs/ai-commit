@@ -1,5 +1,5 @@
 {
-  "name": "ai-commit",
+  "name": "ai-commit-gen",
   "version": "1.0.0",
   "description": "AI-powered CLI tool to generate commit messages from git diff",
   "type": "module",
