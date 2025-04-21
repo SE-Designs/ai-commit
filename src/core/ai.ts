@@ -18,11 +18,11 @@ export async function generateCommitMessage(diff: string, style: CommitStyle): P
       messages: [
         {
           role: "system",
-          content: `Ты — помощник, который пишет краткие и понятные git commit-сообщения. Используй present tense.`,
+          content: `You are an assistant that writes concise and clear git commit messages. Use present tense.`,
         },
         {
           role: "user",
-          content: prompt || `Вот git diff:\n\n${diff}\n\nСгенерируй commit-сообщение:`,
+          content: prompt || `Here is the git diff:\n\n${diff}\n\nGenerate a commit message:`,
         },
       ],
     });
