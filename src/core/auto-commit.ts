@@ -1,25 +1,40 @@
 import { execSync } from "child_process";
 import fs from "fs";
+import chalk from "chalk";
 import { generateCommitMessage } from "./ai";
 import { config } from "../config";
 import { getGitDiff } from "./git";
-import { CommitStyle } from "types";
+import { CommitStyle, CommandOptions } from "types";
 
-export async function handleAutoCommit(style: CommitStyle): Promise<void> {
-  const diff = await getGitDiff();
-  const commitMessage = await generateCommitMessage(diff, style); // Передаем стиль
+interface AutoCommitParams {
+  style: CommitStyle;
+  options?: Partial<CommandOptions>;
+}
 
-  console.log(`🧠 Suggested commit message: ${commitMessage}`);
+export async function handleAutoCommit({ style, options = {} }: AutoCommitParams): Promise<void> {
+  const autoCommit = options.auto || config.autoCommit || false;
 
-  if (config.autoCommit) {
-    console.log("Committing changes...");
-    fs.writeFileSync("temp/git-diff.txt", diff);
+  if (!autoCommit) {
+    console.log(chalk.blue("📝 Auto commit is disabled."));
+    return;
+  }
 
-    try {
-      execSync(`git commit -am "${commitMessage}"`);
-      console.log("Changes committed successfully!");
-    } catch (error) {
-      console.error("❌ Failed in file auto-commit.ts:", error);
-    }
+  console.log(chalk.blue("📝 Auto commit enabled."));
+
+  const diff = await getGitDiff(options.all ?? config.useAllDiff);
+  const commitMessage = await generateCommitMessage(diff, style);
+
+  const tempDir = "temp";
+  if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir);
+  }
+
+  fs.writeFileSync(`${tempDir}/git-diff.txt`, diff);
+
+  try {
+    execSync(`git commit -am "${commitMessage}"`);
+    console.log(chalk.green("✅ Changes committed successfully!"));
+  } catch (error) {
+    console.error(chalk.red("❌ Commit failed:"), error);
   }
 }

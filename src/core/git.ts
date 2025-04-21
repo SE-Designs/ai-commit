@@ -1,6 +1,7 @@
 import simpleGit from 'simple-git';
 import fs from 'fs';
 import path from 'path';
+import chalk from 'chalk';
 
 export async function getGitDiff(useAllDiff: boolean = false): Promise<string> {
   const git = simpleGit();
@@ -18,7 +19,7 @@ export async function getGitDiff(useAllDiff: boolean = false): Promise<string> {
 
     return diff;
   } catch (error) {
-    console.error('❌ Failed in file git.ts:', error);
+    console.error(chalk.red('❌ Failed in file git.ts:', error));
     return '';
   }
 }

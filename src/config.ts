@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { config as dotenvConfig } from "dotenv";
 import { AICommitConfig } from "types";
+import chalk from "chalk";
 
 dotenvConfig();
 
@@ -25,7 +26,7 @@ function loadConfigFromFile(filePath: string): AICommitConfig | null {
       }
     }
   } catch (error) {
-    console.error("❌ Failed in file config.ts:", error);
+    console.error(chalk.red("❌ Failed in file config.ts:", error));
   }
   return null;
 }

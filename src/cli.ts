@@ -6,6 +6,7 @@ import { handleAutoCommit } from "./core/auto-commit";
 import { generateCommitMessage } from "./core/ai";
 import { getGitDiff } from "./core/git";
 import { CommandOptions, CommitStyle } from "types";
+import chalk from "chalk";
 
 program
   .name("ai-commit")
@@ -39,27 +40,28 @@ program.action(async () => {
   const model = options.model ?? config.model;
   const useAllDiff = options.all ?? config.useAllDiff;
   const maxLen = Number(options.max ?? config.maxLen);
-  const autoCommit = options.auto ?? config.autoCommit;
+  const autoCommit = options.auto || config.autoCommit || false;
 
-  console.log(`📦 Using model: ${model}`);
-  console.log(`🎨 Commit style: ${style}`);
-  console.log(`📏 Max length: ${maxLen}`);
-  console.log(`📂 Use full diff: ${useAllDiff}`);
-  console.log(`🚀 Auto commit: ${autoCommit}`);
+  console.log(chalk.green("🚀 AI Commit CLI"));
+  console.log(chalk.blue(`📦 Using model: ${model}`));
+  console.log(chalk.blue(`🎨 Commit style: ${style}`));
+  console.log(chalk.blue(`📏 Max length: ${maxLen}`));
+  console.log(chalk.blue(`📝 Use all diff: ${useAllDiff}`));
+  console.log(chalk.blue(`🤖 Auto commit: ${autoCommit}`));
 
-  if (options.auto) {
-    await handleAutoCommit(style);
+  if (autoCommit) {
+    await handleAutoCommit({ style, options });
   } else {
     const diff = await getGitDiff();
 
     if (!diff) {
-      console.error("❌ No changes detected.");
+      console.error(chalk.red("❌ No changes detected."));
       return;
     }
 
     const commitMessage = await generateCommitMessage(diff, style);
 
-    console.log(`🧠 Suggested commit message: ${commitMessage}`);
+    console.log(chalk.bgGreenBright(`🧠 Suggested commit message: ${commitMessage}`));
   }
 });
 

@@ -1,7 +1,7 @@
 {
-  "autoCommit": false,
+  "autoCommit": true,
   "model": "anthropic/claude-3-haiku",
-  "useAllDiff": true,
+  "useAllDiff": false,
   "maxLen": 128,
   "style": "custom",
   "customPrompt": "Write a very short commit message using one of the following prefixes: add:, upd:, fix:, del:. Use lowercase only. Avoid full sentences. Use 2–5 words after the prefix. Example:\n- add: login screen\n- fix: broken redirect\n- upd: types and config\n- del: unused auth hook"

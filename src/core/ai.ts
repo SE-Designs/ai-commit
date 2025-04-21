@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import { config } from "../config";
 import { getCommitPrompt } from "./commit-style";
 import { CommitStyle } from "types";
+import chalk from "chalk";
 
 const openai = new OpenAI({
   apiKey: config.openaiApiKey,
@@ -28,7 +29,7 @@ export async function generateCommitMessage(diff: string, style: CommitStyle): P
 
     return res.choices[0].message?.content?.trim() ?? "Update code";
   } catch (error) {
-    console.error("❌ Failed in file ai.ts:", error);
+    console.error(chalk.red("❌ Failed in file ai.ts:", error));
     return "Update code";
   }
 }
