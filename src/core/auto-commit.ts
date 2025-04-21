@@ -24,7 +24,7 @@ export async function handleAutoCommit({ style, options = {} }: AutoCommitParams
   const diff = await getGitDiff(options.all ?? config.useAllDiff);
   const commitMessage = await generateCommitMessage(diff, style);
 
-  const tempDir = "temp";
+  const tempDir = "files";
   if (!fs.existsSync(tempDir)) {
     fs.mkdirSync(tempDir);
   }
