@@ -16,11 +16,12 @@ const defaultConfig: AICommitConfig = {
   key: process.env.OPEN_ROUTER_API_KEY || process.env.OPENAI_API_KEY || "",
 };
 
-function loadConfigFromFile(filePath: string): Partial<AICommitConfig> | null {
+async function loadConfigFromFile(filePath: string): Promise<AICommitConfig | null> {
   try {
     if (fs.existsSync(filePath)) {
       if (filePath.endsWith(".js")) {
-        return require(filePath);
+        const config = await import(filePath);
+        return config.default || config;  // Handle default export
       }
     }
   } catch (error) {
@@ -30,7 +31,7 @@ function loadConfigFromFile(filePath: string): Partial<AICommitConfig> | null {
 }
 
 const configFilePath = path.resolve(process.cwd(), "ai-commit.config.js");
-const userConfig = loadConfigFromFile(configFilePath);
+const userConfig = await loadConfigFromFile(configFilePath);
 
 const mergedConfig: AICommitConfig = {
   ...defaultConfig,
