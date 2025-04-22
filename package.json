@@ -1,6 +1,6 @@
 {
   "name": "@se-designs/ai-commit",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "AI-powered CLI tool to generate commit messages from git diff",
   "type": "module",
   "main": "dist/index.js",
