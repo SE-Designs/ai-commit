@@ -11,7 +11,10 @@ interface AutoCommitParams {
   options?: Partial<CommandOptions>;
 }
 
-export async function handleAutoCommit({ style, options = {} }: AutoCommitParams): Promise<void> {
+export async function handleAutoCommit({
+  style,
+  options = {},
+}: AutoCommitParams): Promise<void> {
   const autoCommit = options.auto || config.autoCommit || false;
 
   if (!autoCommit) {
@@ -24,12 +27,12 @@ export async function handleAutoCommit({ style, options = {} }: AutoCommitParams
   const diff = await getGitDiff(options.all ?? config.useAllDiff);
   const commitMessage = await generateCommitMessage(diff, style);
 
-  const tempDir = "files";
-  if (!fs.existsSync(tempDir)) {
-    fs.mkdirSync(tempDir);
-  }
+  // const tempDir = "files";
+  // if (!fs.existsSync(tempDir)) {
+  //   fs.mkdirSync(tempDir);
+  // }
 
-  fs.writeFileSync(`${tempDir}/ai-commit-auto.diff`, diff);
+  // fs.writeFileSync(`${tempDir}/ai-commit-auto.diff`, diff);
 
   try {
     execSync(`git commit -am "${commitMessage}"`);
