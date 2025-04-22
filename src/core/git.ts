@@ -14,7 +14,7 @@ export async function getGitDiff(useAllDiff: boolean = false): Promise<string> {
       fs.mkdirSync(tempDir);
     }
 
-    const filePath = path.join(tempDir, 'diff.txt');
+    const filePath = path.join(tempDir, 'ai-commit.diff');
     fs.writeFileSync(filePath, diff, 'utf-8');
 
     return diff;

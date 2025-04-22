@@ -1,38 +1,37 @@
 import { config } from "../config";
 import { CommitStyle } from "types";
 
-type PromptGenerator = (diff: string) => string;
+type PromptGenerator = (diff: string, userPrompt?: string) => string;
 
 const promptGenerators: Record<CommitStyle, PromptGenerator> = {
-  conventional: (diff) =>
-    `Here is the git diff:\n\n${diff}\n\nGenerate a commit message in Conventional Commit style. Use a type and a brief description. Avoid using capital letters after colon. Example:\n\n- feat: add user authentication flow\n- fix: resolve issue with incorrect user ID\n- chore: update dependencies`,
+  conventional: (diff, userPrompt) =>
+    `Here is the git diff:\n\n${diff}\n\nGenerate a commit message in Conventional Commit style. Use a type and a brief description. Avoid capital letters after colon. Example:\n- feat: add user auth\n- fix: fix bug in ID\n${userPrompt ? `\n\nExtra instructions:\n${userPrompt}` : ""}`,
 
-  gitmoji: (diff) =>
-    `Here is the git diff:\n\n${diff}\n\nGenerate a commit message using Gitmoji style. Start with an emoji code and a brief description. Example:\n\n- ✨: add login feature\n- 🐛: fix crash on dashboard load\n- ♻️: refactor form validation logic`,
+  gitmoji: (diff, userPrompt) =>
+    `Here is the git diff:\n\n${diff}\n\nGenerate a commit message using Gitmoji style. Start with emoji code and short description. Example:\n- ✨: add login\n- 🐛: fix crash\n${userPrompt ? `\n\nExtra instructions:\n${userPrompt}` : ""}`,
 
-  emoji: (diff) =>
-    `Here is the git diff:\n\n${diff}\n\nGenerate a commit message with an emoji and a brief English description. No emoji codes, only emojis. Example:\n\n- ✨ Add login feature\n- 🐛 Fix crash on dashboard\n- ♻️ Refactor validation logic`,
+  emoji: (diff, userPrompt) =>
+    `Here is the git diff:\n\n${diff}\n\nGenerate a commit message with emoji and brief description. No emoji codes. Example:\n- ✨ Add login\n${userPrompt ? `\n\nExtra instructions:\n${userPrompt}` : ""}`,
 
-  imperative: (diff) =>
-    `Here is the git diff:\n\n${diff}\n\nGenerate a commit message in imperative mood (present tense). Example:\n\n- Add login page\n- Fix broken redirect\n- Update user service`,
+  imperative: (diff, userPrompt) =>
+    `Here is the git diff:\n\n${diff}\n\nGenerate a commit message in imperative mood. Example:\n- Add login page\n${userPrompt ? `\n\nExtra instructions:\n${userPrompt}` : ""}`,
 
-  simple: (diff) =>
-    `Here is the git diff:\n\n${diff}\n\nGenerate a short and clear commit message with minimal words. Example:\n\n- Add auth\n- Fix bug\n- Cleanup code`,
+  simple: (diff, userPrompt) =>
+    `Here is the git diff:\n\n${diff}\n\nGenerate a short commit message. Example:\n- Add auth\n${userPrompt ? `\n\nExtra instructions:\n${userPrompt}` : ""}`,
 
-  detailed: (diff) =>
-    `Here is the git diff:\n\n${diff}\n\nGenerate a detailed commit message with 1–2 sentences explaining what was done and why. Example:\n\n- Implemented login form with basic validation to allow users to sign in using email and password.\n- Fixed issue with infinite redirect loop after logout by updating auth middleware.`,
+  detailed: (diff, userPrompt) =>
+    `Here is the git diff:\n\n${diff}\n\nGenerate a detailed commit message with explanation. Example:\n- Implemented login with validation.\n${userPrompt ? `\n\nExtra instructions:\n${userPrompt}` : ""}`,
 
-  semver: (diff) =>
-    `Here is the git diff:\n\n${diff}\n\nGenerate a commit message in Semantic Versioning style, using "feat", "fix", "chore", etc., like Conventional Commits. Example:\n\n- feat: implement password reset flow\n- fix: correct typo in error message\n- chore: remove unused imports`,
+  semver: (diff, userPrompt) =>
+    `Here is the git diff:\n\n${diff}\n\nUse Semantic Versioning style: feat, fix, etc. Example:\n- feat: reset password\n${userPrompt ? `\n\nExtra instructions:\n${userPrompt}` : ""}`,
 
-  custom: (diff) => {
-    const userPrompt = config.customPrompt?.trim();
-    return `Here is the git diff:\n\n${diff}\n\n${userPrompt || "Generate a clear and professional commit message."}`;
-  },
+  custom: (diff, userPrompt) =>
+    `Here is the git diff:\n\n${diff}\n\n${userPrompt || "Generate a clear and professional commit message."}`,
 };
 
 function getCommitPrompt(diff: string, style: CommitStyle): string {
-  return (promptGenerators[style] ?? promptGenerators.conventional)(diff);
+  const userPrompt = config.prompt?.trim();
+  return promptGenerators[style](diff, userPrompt);
 }
 
 export { getCommitPrompt };

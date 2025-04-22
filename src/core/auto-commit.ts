@@ -29,7 +29,7 @@ export async function handleAutoCommit({ style, options = {} }: AutoCommitParams
     fs.mkdirSync(tempDir);
   }
 
-  fs.writeFileSync(`${tempDir}/git-diff.txt`, diff);
+  fs.writeFileSync(`${tempDir}/ai-commit-auto.diff`, diff);
 
   try {
     execSync(`git commit -am "${commitMessage}"`);

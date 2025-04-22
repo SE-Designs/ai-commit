@@ -5,7 +5,7 @@ import { CommitStyle } from "types";
 import chalk from "chalk";
 
 const openai = new OpenAI({
-  apiKey: config.openaiApiKey,
+  apiKey: config.key,
   baseURL: config.baseURL,
 });
 

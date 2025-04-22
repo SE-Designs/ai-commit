@@ -14,7 +14,8 @@ export type AICommitConfig = {
   useAllDiff: boolean;
   maxLen: number;
   style: CommitStyle
-  customPrompt?: string;
+  prompt?: string;
+  key?: string;
 }
 
 export type CommandOptions = {
