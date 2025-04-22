@@ -37,24 +37,24 @@ const mergedConfig: AICommitConfig = {
   ...userConfig,
 };
 
-function validateConfig(cfg: AICommitConfig) {
-  const errors: string[] = [];
+// function validateConfig(cfg: AICommitConfig) {
+//   const errors: string[] = [];
 
-  if (!cfg.key) errors.push("❌ Missing API key (OPEN_ROUTER_API_KEY in .env or `key` in config)");
-  if (!cfg.style) errors.push("❌ Missing commit style (e.g., conventional, gitmoji)");
-  if (!cfg.model) errors.push("❌ Missing model (e.g., gpt-4)");
-  if (!cfg.maxLen || typeof cfg.maxLen !== "number") errors.push("❌ maxLen must be a number");
+//   if (!cfg.key) errors.push("❌ Missing API key (OPEN_ROUTER_API_KEY in .env or `key` in config)");
+//   if (!cfg.style) errors.push("❌ Missing commit style (e.g., conventional, gitmoji)");
+//   if (!cfg.model) errors.push("❌ Missing model (e.g., gpt-4)");
+//   if (!cfg.maxLen || typeof cfg.maxLen !== "number") errors.push("❌ maxLen must be a number");
 
-  if (errors.length) {
-    console.error(chalk.redBright("🚫 Invalid ai-commit.config.js:"));
-    for (const err of errors) {
-      console.error(chalk.red(err));
-    }
-    process.exit(1);
-  }
-}
+//   if (errors.length) {
+//     console.error(chalk.redBright("🚫 Invalid ai-commit.config.js:"));
+//     for (const err of errors) {
+//       console.error(chalk.red(err));
+//     }
+//     process.exit(1);
+//   }
+// }
 
-validateConfig(mergedConfig);
+// validateConfig(mergedConfig);
 
 export const config = {
   baseURL: "https://openrouter.ai/api/v1",
